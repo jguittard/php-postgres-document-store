@@ -845,7 +845,7 @@ EOT;
                 $prop = $this->propToJsonPath($filter->prop());
                 return [
                     "$prop @> :a$argsCount", [
-                        "a$argsCount" => is_array($filter->val() ? $val : [$val])
+                        "a$argsCount" => is_array($filter->val()) ? $val : [$val]
                     ],
                     ++$argsCount
                 ];
