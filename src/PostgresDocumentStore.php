@@ -840,9 +840,15 @@ EOT;
 
                 return ["NOT $innerFilterStr", $args, $argsCount];
             case DocumentStore\Filter\InArrayFilter::class:
+                $val = $this->prepareVal($filter->val(), $filter->prop());
                 /** @var DocumentStore\Filter\InArrayFilter $filter */
                 $prop = $this->propToJsonPath($filter->prop());
-                return ["$prop @> :a$argsCount", ["a$argsCount" => '[' . $this->prepareVal($filter->val(), $filter->prop()) . ']'], ++$argsCount];
+                return [
+                    "$prop @> :a$argsCount", [
+                        "a$argsCount" => is_array($filter->val()) ? $val : [$val]
+                    ],
+                    ++$argsCount
+                ];
             case DocumentStore\Filter\ExistsFilter::class:
                 /** @var DocumentStore\Filter\ExistsFilter $filter */
                 $prop = $this->propToJsonPath($filter->prop());
